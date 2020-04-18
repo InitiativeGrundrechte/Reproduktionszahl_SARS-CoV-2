@@ -13,7 +13,7 @@ idbundesland = "14"
 # Erläuterung der Abfrage:
 # neuerfall = -1 ausschließen (Falschmeldung vom Vortag)
 # aggregieren über Meldedatum summieren von AnzahlFall zu AnzahlFallSumme
-data <- fromJSON("https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=%28neuerfall%3D0+or+neuerfall%3D1%29+and+idbundesland%3D" + idbundesland + "&objectIds=&time=&resultType=none&outFields=Meldedatum%2CAnzahlFallSumme&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=Meldedatum&groupByFieldsForStatistics=Meldedatum&outStatistics=%5B%7B%0D%0A++++++++%22statisticType%22%3A+%22sum%22%2C+%0D%0A++++++++%22onStatisticField%22%3A+%22AnzahlFall%22%2C+%0D%0A++++++++%22outStatisticFieldName%22%3A+%22AnzahlFallSumme%22%0D%0A++++++%7D%5D&having=&resultOffset=&resultRecordCount=&sqlFormat=standard&f=pjson&token=")
+data <- fromJSON(paste0("https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=%28neuerfall%3D0+or+neuerfall%3D1%29+and+idbundesland%3D", idbundesland, "&objectIds=&time=&resultType=none&outFields=Meldedatum%2CAnzahlFallSumme&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=Meldedatum&groupByFieldsForStatistics=Meldedatum&outStatistics=%5B%7B%0D%0A++++++++%22statisticType%22%3A+%22sum%22%2C+%0D%0A++++++++%22onStatisticField%22%3A+%22AnzahlFall%22%2C+%0D%0A++++++++%22outStatisticFieldName%22%3A+%22AnzahlFallSumme%22%0D%0A++++++%7D%5D&having=&resultOffset=&resultRecordCount=&sqlFormat=standard&f=pjson&token="))
 
 # Daten aufbereiten nach den Anforderungen von EpiEstim
 # dates: Datum, I: Anzahl Fälle zum Datum
@@ -32,8 +32,8 @@ for (j in 1:length(all_dates))
 }
 dd <- na.omit(dd[order(dd),])
 
-# letzte 2 Tage löschen (zur Vermeidung von Ungenauigkeiten wegen des Meldeverzugs)
-dd <- head(dd, -2)
+# letzte 3 Tage löschen (zur Vermeidung von Ungenauigkeiten wegen des Meldeverzugs)
+dd <- head(dd, -3)
 
 # Verarbeiten der Daten in EpiEstim
 # Verwendung eines Seriellen Intervalls mit Mittelwert 5,0 und Standardabweichung 1,9 (Ferretti u.a. 2020),
